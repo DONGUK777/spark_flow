@@ -1,4 +1,4 @@
-from spark_flow.re import repartition
+from airflow_spark.re import re_partition
 import pandas as pd
 
 def test_re_partition():
