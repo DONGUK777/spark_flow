@@ -48,7 +48,7 @@ with DAG(
         python_callable=repartition,
         system_site_packages=False,
         trigger_rule="one_success",
-        requirements=["git+https://github.com/DONGUK777/mov.git@0.3/api"],
+        requirements=["git+https://github.com/DONGUK777/spark_flow.git@0.2.0/airflowdag"],
     )
     
 
