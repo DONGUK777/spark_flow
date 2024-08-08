@@ -48,7 +48,7 @@ with DAG(
 
     re_task = PythonVirtualenvOperator(
         task_id = "re.partition",
-        python_callable=repartition,
+        python_callable=re_partition,
         system_site_packages=False,
         trigger_rule="one_success",
         requirements=["git+https://github.com/DONGUK777/spark_flow.git@0.2.0/airflowdag"],
