@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import shutil
 
-def re_partiton(load_dt, from_path='/data/movie_data/data/extract'):
+def re_partition(load_dt, from_path='/data/movie_data/data/extract'):
     home_dir = os.path.expanduser("~")
     read_path = f'{home_dir}/{from_path}/load_dt={load_dt}'
     write_base = f'{home_dir}/data/movie_data/repartition'
