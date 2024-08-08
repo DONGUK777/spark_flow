@@ -30,7 +30,7 @@ with DAG(
     # schedule_interval=timedelta(days=1),
     schedule="10 4 * * *",
     start_date=datetime(2015, 1, 1),
-    end_date=datetime(2025, 3, 3),
+    end_date=datetime(2015, 1, 3),
     catchup=True,
     tags=['spark', 'movie', 'ant'],
 ) as dag:
@@ -44,30 +44,44 @@ with DAG(
         print(f'read_path:{read_path}')
         print(f'write_path:{write_path}')
 
+    def branch_func(ds_nodash):
+        import os
+        home_dir = os.path.expanduser("~")
+        path = f'{home_dir}/data/movie_data/repartition/load_dt={ds_nodash}'
+        # 이미 파일이 있다면 join_df로
+        if os.path.exists(path):
+            return join_df.task_id
+        # 파일이 없다면 re_partition로
+        else:
+            return re_partition.task_id
 
-    re_task = PythonVirtualenvOperator(
+
+    re_task = PythonOperator(
         task_id = "re.partition",
         python_callable=re_partition,
-        system_site_packages=False,
-        trigger_rule="one_success",
-        requirements=["git+https://github.com/DONGUK777/spark_flow.git@0.2.0/airflowdag"],
+        trigger_rule="one_success"
     )
     
+
+##    join_df = BashOperator(
+#        task_id='join.df',
+#        bash_command='''
+#            $SPARK_HOME/bin/spark-submit /home/tommy/code/spyspark/simpleApp.py {{ds_nodash}}
+#        '''
+#    )
 
     join_df = BashOperator(
         task_id='join.df',
         bash_command='''
-            echo "spark-submit..."
-            echo "{{ds_nodash}}"
-        ''',
+            $SPARK_HOME/bin/spark-submit /home/tommy/code/airflow_spark/py/movie_join_df.py {{ds_nodash}}
+        '''
     )
 
     agg_df = BashOperator(
         task_id='agg.df',
         bash_command='''
-            echo "spark-submit..."
-            echo "{{ds_nodash}}"
-        ''',
+            $SPARK_HOME/bin/spark-submit /home/tommy/code/airflow_spark/py/movie_sum_df.py {{ds_nodash}}
+        '''
     )
     start = EmptyOperator(task_id='start')
     end = EmptyOperator(task_id='end')
