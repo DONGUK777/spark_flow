@@ -13,7 +13,7 @@ def re_partiton(load_dt, from_path='/data/movie_data/data/extract'):
     rm_dir(write_path)
 
     df.to_parquet(
-            write_path,
+            write_base,
             partition_cols=['load_dt', 'multiMovieYn', 'repNationCd']
             )
 
