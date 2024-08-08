@@ -65,7 +65,7 @@ with DAG(
 
     re_task = PythonVirtualenvOperator(
         task_id = "re.partition",
-        python_callable=re_partition,
+        python_callable=repartition,
         system_site_packages=False,
         trigger_rule="one_success",
         requirements=["git+https://github.com/DONGUK777/mov.git@0.3/api"],
