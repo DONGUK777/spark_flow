@@ -38,10 +38,13 @@ with DAG(
   # t1, t2 and t3 are examples of tasks created by instantiating operators
 
 
-    def repartition(ds_nodash):
-        print("*" * 33)
-        print(ds_nodash)
-        print("*" * 33)
+    def re_partition(ds_nodash):
+        from spark_flow.re import re_partition
+        df_row_cnt, read_path, write_path= re_partition(ds_nodash)
+        print(f'df_row_cnt:{df_row_cnt}')
+        print(f'read_path:{read_path}')
+        print(f'write_path:{write_path}')
+
 
     re_task = PythonVirtualenvOperator(
         task_id = "re.partition",
