@@ -30,7 +30,7 @@ with DAG(
     # schedule_interval=timedelta(days=1),
     schedule="10 4 * * *",
     start_date=datetime(2015, 1, 1),
-    end_date=datetime(2015, 2, 1),
+    end_date=datetime(2015, 3, 31),
     catchup=True,
     tags=['spark', 'movie', 'ant'],
 ) as dag:
@@ -81,7 +81,8 @@ with DAG(
         task_id='agg.df',
         bash_command='''
             $SPARK_HOME/bin/spark-submit /home/tommy/code/airflow_spark/py/movie_sum_df.py {{ds_nodash}}
-        '''
+            echo {{ds_nodash}}
+            '''
     )
     start = EmptyOperator(task_id='start')
     end = EmptyOperator(task_id='end')
